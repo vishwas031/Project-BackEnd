@@ -21,11 +21,12 @@ exports.addNote = (req, res) => {
 
 exports.getAllNotes = (req, res) => {
   client
-    .query(`SELECT * FROM notes WHERE email = '${req.email}'`)
+    .query(`SELECT * FROM notes WHERE email = '${req.email}';`)
     .then((data) => {
       const noteData = data.rows;
       const filteredData = noteData.map((note) => {
         return {
+          // name : note.name,
           noteId: note.noteid,
           heading: note.heading,
           content: note.content,
@@ -49,11 +50,31 @@ exports.updateNote = (req, res) => {
   const { heading, content } = req.body;
   client
     .query(
-      `UPDATE notes SET heading='${heading}' , content='${content}' WHERE noteid='${noteId}'`
+      `UPDATE notes SET heading='${heading}' , content='${content}' WHERE noteid='${noteId}';`
     )
     .then((data) => {
       res.status(200).json({
         message: "Successfully updated",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({
+        message: "DataBase error occured",
+      });
+    });
+};
+
+exports.deleteNote = (req, res) => {
+  const noteId = req.noteId;
+  // const { heading, content } = req.body;
+  client
+    .query(
+      `DELETE FROM notes WHERE noteid='${noteId}';`
+    )
+    .then(() => {
+      res.status(200).json({
+        message: "Deleted updated",
       });
     })
     .catch((err) => {

@@ -39,6 +39,13 @@ exports.signUp = (req, res) => {
         res.status(400).json({
           error: "User already exists.",
         });
+      }
+        //IF USER DIDN'T ENTER ANY INPUT
+        else if(email.length === 0 || password.length === 0 || name.length === 0){
+        res.status(400).json({
+          message: "Fill all Entries",
+          alert: "Fill all Entries"
+        });
       } else {
         //IF THE CONDITION IS FALSE THAT IS THE USER DOES NOT EXIST ALREADY IN OUT DB, WE NEED TO SAVE HIS DATA TO DB FOR THAT FIRST WE HASH THE PLAIN PASSWORD GIVEN BY USER
         bcrypt.hash(password, 10, (err, hash) => {
